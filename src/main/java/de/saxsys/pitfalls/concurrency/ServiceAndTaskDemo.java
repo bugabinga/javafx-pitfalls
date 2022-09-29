@@ -1,6 +1,5 @@
 package de.saxsys.pitfalls.concurrency;
 
-import com.guigarage.flatterfx.FlatterFX;
 import javafx.application.Application;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -21,7 +20,6 @@ public class ServiceAndTaskDemo extends Application {
 
     @Override
     public void start(Stage stage) {
-        FlatterFX.style();
         ServiceAndTask demoControl = new ServiceAndTask();
         Scene scene = new Scene(demoControl, 800, 400);
         stage.setScene(scene);

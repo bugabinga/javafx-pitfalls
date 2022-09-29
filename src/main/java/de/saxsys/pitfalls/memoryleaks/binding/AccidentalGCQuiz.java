@@ -1,6 +1,5 @@
 package de.saxsys.pitfalls.memoryleaks.binding;
 
-import com.guigarage.flatterfx.FlatterFX;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -17,65 +16,73 @@ import javafx.util.converter.NumberStringConverter;
 /**
  * Created by Andy Moncsek on 14.10.15.
  */
-public class AccidentalGCQuiz extends Application {
-    DoubleBinding add;
+public class AccidentalGCQuiz extends Application
+{
+  DoubleBinding add;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        FlatterFX.style();
-        HBox container = new HBox();
-        Scene scene = new Scene(container, 400, 150);
-        VBox main = new VBox();
-        HBox input = new HBox();
+  @Override
+  public void start( final Stage primaryStage ) throws Exception
+  {
+    final HBox container = new HBox();
+    final Scene scene = new Scene( container, 400, 150 );
+    final VBox main = new VBox();
+    final HBox input = new HBox();
 
-        TextField numberOne = new TextField();
-        TextField numberTwo = new TextField();
+    final TextField numberOne = new TextField();
+    final TextField numberTwo = new TextField();
 
-        Button forceGC = new Button("(try) force gc");
+    final Button forceGC = new Button( "(try) force gc" );
 
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Slider Sample");
+    primaryStage.setScene( scene );
+    primaryStage.setTitle( "Slider Sample" );
 
-        forceGC.setOnAction(event -> System.gc());
+    forceGC.setOnAction( event -> System.gc() );
 
-        StringConverter<Number> converter = new NumberStringConverter();
-        DoubleProperty one = new SimpleDoubleProperty();
-        DoubleProperty two = new SimpleDoubleProperty();
+    final StringConverter<Number> converter = new NumberStringConverter();
+    final DoubleProperty one = new SimpleDoubleProperty();
+    final DoubleProperty two = new SimpleDoubleProperty();
 
-        Bindings.bindBidirectional(numberOne.textProperty(), one, converter);
-        Bindings.bindBidirectional(numberTwo.textProperty(), two, converter);
-
-
-        Bindings.
-                add(one, two).
-                addListener((x, y, z) -> {
-                    if (z != null && z.intValue() == 10) {
-                        javafx.scene.control.Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Login Dialog");
-                        alert.setHeaderText("Look, an Information Dialog");
-                        alert.setContentText("Correct");
-
-                        alert.showAndWait();
-                    }
-
-                });
+    Bindings.bindBidirectional( numberOne.textProperty(), one, converter );
+    Bindings.bindBidirectional( numberTwo.textProperty(), two, converter );
 
 
-        /**
-         * Solution !!
-         add = add(one, two);
-         add.addListener((a, b, c) -> {
-          ....
-         });
-         **/
-        input.getChildren().addAll(numberOne,numberTwo);
-        main.getChildren().addAll(input, forceGC);
+    Bindings.
+        add( one, two ).
+        addListener( ( x, y, z ) ->
+        {
+          if ( z != null && z.intValue() == 10 )
+          {
+            final javafx.scene.control.Alert alert = new Alert( Alert.AlertType.INFORMATION );
+            alert.setTitle( "Login Dialog" );
+            alert.setHeaderText( "Look, an Information Dialog" );
+            alert.setContentText( "Correct" );
 
-        container.getChildren().addAll(main);
-        primaryStage.show();
+            alert.showAndWait();
+          }
+
+        } );
+
+
+    /**
+     * Solution !!
+     add = add(one, two);
+     add.addListener((a, b, c) -> {
+     ....
+     });
+     **/
+    input.getChildren().addAll( numberOne, numberTwo );
+    main.getChildren().addAll( input, forceGC );
+
+    container.getChildren().addAll( main );
+    primaryStage.show();
+  }
+
+
+  interface ClasspathWorkaround
+  {
+    static void main( final String[] args )
+    {
+      Application.launch( AccidentalGCQuiz.class, args );
     }
-
-    public static void main(final String[] args) {
-        Application.launch(args);
-    }
+  }
 }
