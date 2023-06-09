@@ -42,7 +42,6 @@ public class CircleArea extends Region {
 		cacheToggle.selectedProperty().addListener(
 				(ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 					callback.accept(newValue);
-					FPSUtil.resetAverageFPS();
 					if (newValue) {
 						cacheToggle.setText("Disable Caching");
 					} else {
